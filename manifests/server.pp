@@ -42,7 +42,7 @@ class rabbitmq::server (
   validate_re($port, '\d+')
 
   if $version == 'UNSET' {
-    $version_real = '3.1.1'
+    $version_real = '2.8.4'
     $pkg_ensure_real   = 'present'
   } else {
     $version_real = $version
