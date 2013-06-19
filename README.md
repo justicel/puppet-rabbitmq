@@ -21,7 +21,7 @@ Enable the rabbitmq management console (browser, default port is 55672)
 
     rabbitmq_plugin { 'rabbitmq_management':
       ensure   => present,
-      provider => 'rabbitmq-plugins',
+      provider => 'rabbitmqplugins',
     }
 
     # Notify rabbitmq service to activate the plugin:
@@ -47,7 +47,7 @@ To configure stomp, enable the plugin and use rabbitmq::config::stomp if you wan
 
     rabbitmq_plugin {'rabbitmq_stomp':
       ensure => present,
-      provider => 'rabbitmq-plugins',
+      provider => 'rabbitmqplugins',
     }
 
     class { 'rabbitmq::config::stomp':
@@ -63,7 +63,7 @@ Enable and configure the RabbitMQ shovel plugin
 
     rabbitmq_plugin {'rabbitmq_shovel':
       ensure   => present,
-      provider => 'rabbitmq-plugins',
+      provider => 'rabbitmqplugins',
     }
 
     rabbitmq::config::shovel { 'myshovel':
@@ -114,5 +114,5 @@ query all currently enabled plugins `$ puppet resource rabbitmq_plugin`
 
     rabbitmq_plugin {'rabbitmq_stomp':
       ensure => present,
-      provider => 'rabbitmq-plugins',
+      provider => 'rabbitmqplugins',
     }
