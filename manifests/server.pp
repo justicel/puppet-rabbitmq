@@ -27,7 +27,7 @@ class rabbitmq::server (
   $package_name      = 'rabbitmq-server',
   $repo_package      = false,
   $version           = 'UNSET',
-  $relversion        = '1'
+  $relversion        = '1',
   $service_name      = 'rabbitmq-server',
   $service_ensure    = 'running',
   $node_ip_address   = 'UNSET',
