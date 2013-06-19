@@ -12,7 +12,8 @@
 #  [*node_ip_address*] - ip address for rabbitmq to bind to
 #  [*basedir*] - default directory for data, defaults to /var/lib/rabbitmq
 #  [*config*] - contents of config file. You can either provide this parameter,
-#               or use one of these: rabbitmq::config::shovel, rabbitmq::config::cluster, rabbitmq::config::stomp
+#               or use one of these: rabbitmq::config::shovel,
+#               rabbitmq::config::cluster, rabbitmq::config::stomp
 #  [*env_config*] - contents of env-config file
 # Requires:
 #  stdlib
@@ -21,16 +22,18 @@
 # Use rabbitmq::config::shovel to define shovel(s).
 #
 class rabbitmq::server (
-  $port = '5672',
+  $port              = '5672',
   $delete_guest_user = false,
-  $package_name = 'rabbitmq-server',
-  $version = 'UNSET',
-  $service_name = 'rabbitmq-server',
-  $service_ensure = 'running',
-  $node_ip_address = 'UNSET',
-  $basedir = '/var/lib/rabbitmq',
-  $config='UNSET',
-  $env_config='UNSET',
+  $package_name      = 'rabbitmq-server',
+  $repo_package      = false,
+  $version           = 'UNSET',
+  $relversion        = '1'
+  $service_name      = 'rabbitmq-server',
+  $service_ensure    = 'running',
+  $node_ip_address   = 'UNSET',
+  $basedir           = '/var/lib/rabbitmq',
+  $config            = 'UNSET',
+  $env_config        = 'UNSET',
 ) {
 
   include concat::setup
@@ -39,7 +42,7 @@ class rabbitmq::server (
   validate_re($port, '\d+')
 
   if $version == 'UNSET' {
-    $version_real = '2.4.1'
+    $version_real = '3.1.1'
     $pkg_ensure_real   = 'present'
   } else {
     $version_real = $version
@@ -93,16 +96,16 @@ class rabbitmq::server (
   }
 
   file { $basedir:
-    ensure => directory,
-    owner  => 'rabbitmq',
-    group  => 'rabbitmq',
+    ensure  => directory,
+    owner   => 'rabbitmq',
+    group   => 'rabbitmq',
     require => Package[$package_name]
   }
 
   file { "${basedir}/mnesia":
-    ensure => directory,
-    owner  => 'rabbitmq',
-    group  => 'rabbitmq',
+    ensure  => directory,
+    owner   => 'rabbitmq',
+    group   => 'rabbitmq',
     require => Package[$package_name]
   }
 
@@ -114,9 +117,30 @@ class rabbitmq::server (
 
   $plugin_dir = "/usr/lib/rabbitmq/lib/rabbitmq_server-${version_real}/plugins"
 
-  package { $package_name:
-    ensure => $pkg_ensure_real,
-    notify => Class['rabbitmq::service'],
+  #Install package via repository or system packages
+  if $repo_package == true {
+    case $::osfamily {
+      Redhat: {
+        class {'rabbitmq::repo::rhel':
+          version    => $version_real,
+          relversion => $relversion,
+          notify     => Class['rabbitmq::service'],
+        }
+      }
+      Debian: {
+        class {'rabbitmq::repo::apt':
+          version    => $version_real,
+          relversion => $relversion,
+          notify     => Class['rabbitmq::service'],
+        }
+      }
+      default: { }
+    }
+  } else {
+    package { $package_name:
+      ensure => $pkg_ensure_real,
+      notify => Class['rabbitmq::service'],
+    }
   }
 
   file { 'rabbitmq-env.config':
