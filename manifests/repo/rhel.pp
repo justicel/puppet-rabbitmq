@@ -4,14 +4,18 @@ class rabbitmq::repo::rhel (
     $relversion = '1',
 ) {
     exec { "rpm --import ${key}":
-        path => ['/bin','/usr/bin','/sbin','/usr/sbin'],
+        path    => ['/bin','/usr/bin','/sbin','/usr/sbin'],
     }
 
     package { 'rabbitmq-server':
         ensure   => installed,
-        provider => yum,
+        provider => rpm,
         source   => "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/rabbitmq-server-${version}-${relversion}.noarch.rpm",
-        require  => Exec["rpm --import ${key}"],
+        require  => [ Exec["rpm --import ${key}"], Package['erlang'], ],
+    }
+
+    package { 'erlang':
+      ensure => installed,
     }
 
 }
