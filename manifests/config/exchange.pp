@@ -15,6 +15,7 @@ define rabbitmq::config::exchange (
                 --vhost=${vhost} name=${name} type=${type}",
     path    => ['/usr/local/bin','/bin','/sbin','/usr/bin','/usr/sbin'],
     require => File['/usr/local/bin/rabbitmqadmin'],
+    unless  => "rabbitmqctl list_exchanges -p ${vhost} | grep ${name}",
   }
 
 }
