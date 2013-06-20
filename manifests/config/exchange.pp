@@ -10,8 +10,9 @@ define rabbitmq::config::exchange (
  
   #Run the exchange creation command
   exec { "rabbitmqadmin-exchange-${name}":
-    command => "rabbitmqadmin declare exchange --username=${cli_user} \
-                --password=${cli_pass} --vhost=${vhost} name=${name} type=${type}",
+    command => "rabbitmqadmin declare exchange \
+                --username=${cli_user} --password=${cli_pass} \
+                --vhost=${vhost} name=${name} type=${type}",
     path    => ['/usr/local/bin','/bin','/sbin','/usr/bin','/usr/sbin'],
     require => File['/usr/local/bin/rabbitmqadmin'],
   }
