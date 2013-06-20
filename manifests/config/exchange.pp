@@ -7,7 +7,7 @@ define rabbitmq::config::exchange (
 ) {
 
   include rabbitmq::config::admininstall
- 
+
   #Run the exchange creation command
   exec { "rabbitmqadmin-exchange-${name}":
     command => "rabbitmqadmin declare exchange \
@@ -17,4 +17,4 @@ define rabbitmq::config::exchange (
     require => File['/usr/local/bin/rabbitmqadmin'],
   }
 
-} 
+}
