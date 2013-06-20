@@ -14,7 +14,8 @@ define rabbitmq::config::exchange (
                 --username=${cli_user} --password=${cli_pass} \
                 --vhost=${vhost} name=${name} type=${type}",
     path    => ['/usr/local/bin','/bin','/sbin','/usr/bin','/usr/sbin'],
-    require => File['/usr/local/bin/rabbitmqadmin'],
+    require => [File['/usr/local/bin/rabbitmqadmin'],
+                Rabbitmq_vhost["${vhost}"] ],
     unless  => "rabbitmqctl list_exchanges -p ${vhost} | grep ${name}",
   }
 
