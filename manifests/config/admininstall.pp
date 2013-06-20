@@ -6,6 +6,7 @@ class rabbitmq::config::admininstall {
                 -O /usr/local/bin/rabbitmqadmin',
     path    => ['/usr/bin', '/bin', '/sbin', '/usr/sbin'],
     creates => '/usr/local/bin/rabbitmqadmin',
+    require => Rabbitmq_plugin['rabbitmq_management'],
   }
   file { '/usr/local/bin/rabbitmqadmin':
     owner   => root,
