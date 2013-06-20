@@ -5,7 +5,7 @@ define rabbitmq::config::exchange (
 ) {
 
   #Install rabbitmqadmin to the host
-  exec { 'rabbitmqadmin-download':
+  exec { "rabbitmqadmin-download-${name}":
     command => 'wget http://localhost:15672/cli/rabbitmqadmin -O /usr/local/bin/rabbitmqadmin',
     path    => ['/usr/bin', '/bin', '/sbin', '/usr/sbin'],
     creates => '/usr/local/bin/rabbitmqadmin',
@@ -14,7 +14,7 @@ define rabbitmq::config::exchange (
     owner   => root,
     group   => root,
     mode    => '0655',
-    require => Exec['rabbitmqadmin-download'],
+    require => Exec["rabbitmqadmin-download-${name}"],
   } 
  
   #Run the exchange creation command
