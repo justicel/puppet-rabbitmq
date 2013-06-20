@@ -1,8 +1,7 @@
-class rabbitmq::config::exchange (
+define rabbitmq::config::exchange (
   $vhost      = '/',
   $type       = 'direct',
   $webui_port = '15672',
-  $name,
 ) {
 
   #Install rabbitmqadmin to the host
