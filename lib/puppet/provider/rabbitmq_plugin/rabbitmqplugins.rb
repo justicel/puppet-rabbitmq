@@ -3,6 +3,7 @@ Puppet::Type.type(:rabbitmq_plugin).provide(:rabbitmqplugins) do
   has_command(:rabbitmqplugins, 'rabbitmq-plugins') do
      is_optional
      environment :HOME => "/tmp"
+     environment :PATH => "#{ENV['PATH']:/usr/lib/rabbitmq/bin"
   end
   defaultfor :feature => :posix
 
